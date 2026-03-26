@@ -3,134 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Premium | Nyx Shop</title>
+    <title>X-Buyer | Telegram Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Kantumruy Pro', sans-serif; background: #05060f; color: white; }
-        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 215, 0, 0.1); }
-        .gold-glow { color: #ffd700; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
-        .card-active { border: 1px solid #ffd700; box-shadow: 0 0 20px rgba(255, 215, 0, 0.15); }
-        input::placeholder { color: rgba(255, 255, 255, 0.3); }
+        body { font-family: 'Kantumruy Pro', sans-serif; background: #05060f; color: white; min-height: 100vh; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 215, 0, 0.2); }
+        .gold-glow { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+        input::placeholder { color: rgba(255, 255, 255, 0.2); }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-6">
+<body class="flex items-center justify-center p-6">
 
-    <div class="w-full max-w-md animate__animated animate__fadeIn">
-        <div class="text-center mb-10">
+    <div class="w-full max-w-md text-center animate__animated animate__fadeIn">
+        <header class="mb-10">
             <h1 class="text-4xl font-bold gold-glow mb-2">Nyx Shop</h1>
-            <p class="text-gray-500 text-sm">សេវាកម្ម Telegram Premium ស្វ័យប្រវត្តិ ២៤ ម៉ោង</p>
-        </div>
-
-        <div class="mb-8">
-            <label class="block text-xs text-gray-500 mb-3 ml-2 uppercase tracking-widest">ព័ត៌មានអតិថិជន</label>
-            <input id="tgUser" type="text" placeholder="បញ្ចូល Username @ ឬ ID របស់អ្នក" 
-                   class="w-full p-5 rounded-[20px] bg-white/5 border border-white/10 focus:border-yellow-500 outline-none text-center text-lg transition-all shadow-inner">
-        </div>
-
-        <label class="block text-xs text-gray-500 mb-3 ml-2 uppercase tracking-widest">ជ្រើសរើសគម្រោង</label>
-        <div class="space-y-4">
-            <div onclick="initiatePayment(61000, '3 Months')" class="glass p-6 rounded-[25px] cursor-pointer hover:scale-[1.02] transition-all">
-                <div class="flex justify-between items-center">
-                    <span class="text-lg">3 ខែ (3 Months)</span>
-                    <span class="text-2xl font-bold gold-glow">$14.99</span>
-                </div>
-            </div>
-
-            <div onclick="initiatePayment(81500, '6 Months')" class="glass p-6 rounded-[25px] border-yellow-500/50 border-2 cursor-pointer hover:scale-[1.02] transition-all relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-yellow-500 text-black text-[10px] px-3 py-1 font-bold rounded-bl-lg">BEST VALUE</div>
-                <div class="flex justify-between items-center">
-                    <span class="text-lg font-bold">6 ខែ (6 Months)</span>
-                    <span class="text-2xl font-bold gold-glow">$19.99</span>
-                </div>
-            </div>
-
-            <div onclick="initiatePayment(163000, '1 Year')" class="glass p-6 rounded-[25px] cursor-pointer hover:scale-[1.02] transition-all">
-                <div class="flex justify-between items-center text-lg">
-                    <span>1 ឆ្នាំ (1 Year)</span>
-                    <span class="text-2xl font-bold gold-glow">$39.99</span>
-                </div>
-            </div>
-        </div>
+            <p class="text-gray-500 text-sm">សេវាកម្ម Telegram Premium ស្វ័យប្រវត្តិ</p>
+        </header>
         
-        <p class="text-center text-[10px] text-gray-600 mt-10 uppercase tracking-widest">Powered by Bakong KHQR</p>
+        <div class="mb-8">
+            <label class="block text-left text-xs text-gray-500 mb-2 ml-2 uppercase tracking-widest">ព័ត៌មានអតិថិជន</label>
+            <input id="tgUser" type="text" placeholder="Username @ ឬ ID របស់អ្នក" 
+                   class="w-full p-5 rounded-2xl bg-white/5 border border-white/10 focus:border-yellow-500 outline-none text-center text-lg transition-all">
+        </div>
+
+        <div class="space-y-4">
+            <div onclick="initiateOrder(61000, '3 Months')" class="glass p-6 rounded-3xl cursor-pointer hover:scale-[1.02] transition-all">
+                <div class="flex justify-between items-center text-lg">
+                    <span>3 ខែ (3 Months)</span>
+                    <span class="font-bold gold-glow">$14.99</span>
+                </div>
+            </div>
+
+            <div onclick="initiateOrder(81500, '6 Months')" class="glass p-6 rounded-3xl border-yellow-500 border-2 cursor-pointer hover:scale-[1.02] transition-all relative">
+                <div class="absolute -top-3 right-4 bg-yellow-500 text-black text-[10px] px-2 py-0.5 rounded font-bold">BEST VALUE</div>
+                <div class="flex justify-between items-center text-lg font-bold">
+                    <span>6 ខែ (6 Months)</span>
+                    <span class="gold-glow">$19.99</span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="paymentOverlay" class="fixed inset-0 bg-black/95 hidden items-center justify-center z-50 p-6 backdrop-blur-md">
         <div class="glass p-10 rounded-[40px] w-full max-w-sm text-center animate__animated animate__zoomIn">
-            <h2 class="text-xl font-bold mb-8">ស្កេន QR ដើម្បីបង់ប្រាក់</h2>
+            <h2 class="text-xl font-bold mb-8">ស្កេនដើម្បីបង់ប្រាក់</h2>
             
-            <div id="qrPlaceholder" class="bg-white p-4 rounded-[30px] inline-block mb-8 shadow-2xl shadow-yellow-500/20">
+            <div id="qrPlaceholder" class="bg-white p-4 rounded-3xl inline-block mb-6 shadow-2xl shadow-yellow-500/10">
                 </div>
             
-            <div id="statusBox" class="flex flex-col items-center">
-                <div class="flex items-center gap-3 mb-2">
+            <div id="statusUpdate">
+                <div class="flex items-center justify-center gap-2 mb-2">
                     <div class="w-2 h-2 bg-yellow-500 rounded-full animate-ping"></div>
-                    <p class="text-yellow-500 font-medium">កំពុងរង់ចាំការបង់ប្រាក់...</p>
+                    <p class="text-yellow-500 text-sm">កំពុងរង់ចាំការបង់ប្រាក់...</p>
                 </div>
-                <p class="text-xs text-gray-500">កុំបិទផ្ទាំងនេះ រហូតដល់ការបង់ប្រាក់ជោគជ័យ</p>
             </div>
 
-            <button onclick="window.location.reload()" class="mt-10 text-gray-500 hover:text-white transition-colors underline decoration-dotted text-sm">បោះបង់ការទិញ</button>
+            <button onclick="window.location.reload()" class="mt-8 text-gray-500 underline text-sm">បោះបង់ការបញ្ជាទិញ</button>
         </div>
     </div>
 
     <script>
+        // ភ្ជាប់ទៅកាន់ Replit របស់អ្នក
         const API_URL = "https://mainpy--mdara9695.replit.app";
-        let checkInterval;
+        let pollTimer;
 
-        async function initiatePayment(rielAmount, planName) {
-            const userId = document.getElementById('tgUser').value.trim();
-            if (!userId) {
-                alert("សូមបញ្ចូល Username ឬ ID របស់អ្នកសិន!");
-                return;
-            }
+        async function initiateOrder(rielAmount, planName) {
+            const user = document.getElementById('tgUser').value.trim();
+            if (!user) return alert("សូមបញ្ចូល Username ឬ ID របស់អ្នក!");
 
             document.getElementById('paymentOverlay').classList.replace('hidden', 'flex');
 
             try {
                 const response = await fetch(`${API_URL}/create_order`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ amount: rielAmount })
                 });
+                
                 const data = await response.json();
 
-                // Generate QR View
-                const qrImage = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(data.qr)}`;
-                document.getElementById('qrPlaceholder').innerHTML = `<img src="${qrImage}" class="rounded-2xl">`;
+                if (data.success) {
+                    // បង្ហាញ QR Code និងប៊ូតុង Deeplink
+                    const qrImg = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(data.qr)}`;
+                    document.getElementById('qrPlaceholder').innerHTML = `
+                        <img src="${qrImg}" class="mx-auto rounded-xl shadow-lg">
+                        <a href="${data.deeplink}" class="mt-6 block bg-red-600 text-white py-4 px-6 rounded-2xl font-bold animate__animated animate__pulse animate__infinite">
+                            បើកក្នុង App បាគង
+                        </a>
+                    `;
 
-                // Start Polling (Auto-check)
-                startChecking(data.hash, planName, userId);
-
+                    // ចាប់ផ្តើមឆែកស្ថានភាពបង់ប្រាក់
+                    verifyPayment(data.hash, planName, user);
+                }
             } catch (err) {
-                alert("មិនអាចភ្ជាប់ទៅម៉ាស៊ីនបម្រើបានទេ!");
-                location.reload();
+                alert("មិនអាចភ្ជាប់ទៅកាន់ម៉ាស៊ីនបម្រើបានទេ! សូមប្រាកដថា Replit កំពុង Run។");
+                window.location.reload();
             }
         }
 
-        function startChecking(hash, plan, user) {
-            checkInterval = setInterval(async () => {
+        function verifyPayment(hash, plan, user) {
+            pollTimer = setInterval(async () => {
                 try {
                     const res = await fetch(`${API_URL}/check_status/${hash}/${plan}/${user}`);
                     const result = await res.json();
                     
                     if (result.paid) {
-                        clearInterval(checkInterval);
-                        document.getElementById('statusBox').innerHTML = `
-                            <div class="animate__animated animate__bounceIn text-center">
-                                <p class="text-green-500 font-bold text-2xl mb-1">✅ ទូទាត់ជោគជ័យ!</p>
-                                <p class="text-gray-400 text-xs">ព័ត៌មានត្រូវបានផ្ញើទៅកាន់ Admin រួចរាល់។</p>
+                        clearInterval(pollTimer);
+                        document.getElementById('statusUpdate').innerHTML = `
+                            <div class="animate__animated animate__bounceIn">
+                                <p class="text-green-500 font-bold text-2xl">✅ បង់ប្រាក់ជោគជ័យ!</p>
+                                <p class="text-gray-400 text-xs mt-1">Admin នឹងផ្ញើ Premium ជូនលោកអ្នក។</p>
                             </div>
                         `;
                         setTimeout(() => {
-                            alert("អរគុណសម្រាប់ការគាំទ្រ! យើងនឹងដំណើរការជូនក្នុងពេលឆាប់ៗ។");
+                            alert("អរគុណសម្រាប់ការគាំទ្រ! ការបញ្ជាទិញរបស់អ្នកបានផ្ញើទៅ Admin រួចហើយ។");
                             window.location.reload();
                         }, 3000);
                     }
                 } catch (e) {
-                    console.log("Retrying connection...");
+                    console.log("កំពុងព្យាយាមភ្ជាប់ឡើងវិញ...");
                 }
             }, 3000);
         }

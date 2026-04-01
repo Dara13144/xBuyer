@@ -259,8 +259,9 @@
 
 <script>
     // ===== CONFIGURATION =====
-    // UPDATE THIS TO YOUR ACTUAL REPLIT BACKEND URL
-    const API_BASE = 'https://run-bot-1--xtih1931.replit.app';
+    // If frontend is hosted on Vercel and backend on Replit, use the absolute Replit URL.
+    // If both are on the same server, use relative paths.
+    const API_BASE = '';  // Leave empty if same origin, else set to 'https://your-replit-url.replit.app'
 
     let selectedPlan = null;
     let currentOrderId = null;

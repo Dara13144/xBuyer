@@ -161,6 +161,15 @@
             font-weight: bold;
             color: #1e3c72;
         }
+        .md5-code {
+            font-family: monospace;
+            font-size: 0.9rem;
+            font-weight: bold;
+            background: #fff3cd;
+            padding: 8px;
+            border-radius: 8px;
+            word-break: break-all;
+        }
         .loading {
             display: inline-block;
             width: 20px;
@@ -231,11 +240,13 @@
             <div class="info-text">
                 🔑 លេខកូដយោង: <span id="challengeValue" class="challenge-code"></span><br>
                 💵 ចំនួនទឹកប្រាក់: <strong id="amountValue"></strong><br>
-                ⏱ សុពលភាព 5 នាទី
+                ⏱ សុពលភាព 5 នាទី<br><br>
+                🧾 <strong>MD5 Code (ត្រូវបញ្ចូលជាលេខប្រតិបត្តិការ)</strong><br>
+                <span id="md5Value" class="md5-code"></span>
             </div>
             <div class="input-group">
                 <label>💳 លេខប្រតិបត្តិការ (Transaction ID)</label>
-                <input type="text" id="transactionId" placeholder="ឧ. BKG123456789">
+                <input type="text" id="transactionId" placeholder="ចម្លង MD5 Code ខាងលើ">
             </div>
             <button class="btn" id="verifyBtn">ផ្ទៀងផ្ទាត់ការបង់ប្រាក់</button>
         </div>
@@ -247,12 +258,14 @@
 <div id="toast" class="toast"></div>
 
 <script>
-    // 🔥 UPDATE THIS TO YOUR ACTUAL REPLIT BACKEND URL 🔥
+    // ===== CONFIGURATION =====
+    // UPDATE THIS TO YOUR ACTUAL REPLIT BACKEND URL
     const API_BASE = 'https://run-bot-1--xtih1931.replit.app';
 
     let selectedPlan = null;
     let currentOrderId = null;
     let currentChallenge = null;
+    let expectedMd5 = null;
     let usernameValid = false;
     let usernameCheckTimeout = null;
 
@@ -347,15 +360,18 @@
             }
             currentOrderId = data.order_id;
             currentChallenge = data.challenge;
+            expectedMd5 = data.expected_md5;
+
             document.getElementById('challengeValue').innerText = currentChallenge;
             document.getElementById('amountValue').innerText = `$${data.amount}`;
-            // QR image from absolute URL
+            document.getElementById('md5Value').innerText = expectedMd5;
+
             const qrFullUrl = `${API_BASE}${data.qr_url}`;
             document.getElementById('qrContainer').innerHTML = `<img src="${qrFullUrl}?t=${Date.now()}" alt="QR Code">`;
             document.getElementById('paymentSection').style.display = 'block';
             btn.innerHTML = 'បង្កើតការបញ្ជាទិញ';
             btn.disabled = false;
-            showToast('បង្កើតដោយជោគជ័យ! សូមបង់ប្រាក់តាម QR');
+            showToast('បង្កើតដោយជោគជ័យ! សូមបង់ប្រាក់តាម QR ហើយចម្លង MD5 Code ខាងលើ');
         })
         .catch(err => {
             showToast('កំហុសប្រព័ន្ធ');

